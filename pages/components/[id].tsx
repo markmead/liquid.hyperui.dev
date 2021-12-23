@@ -28,7 +28,6 @@ export async function getStaticProps({ params: { id } }: Params) {
   return {
     props: {
       collection,
-      id,
     },
   }
 }
@@ -43,13 +42,11 @@ type Props = {
   collection: Collection
 }
 
-const Collection: NextPage<Props> = ({ collection, id }) => {
+const Collection: NextPage<Props> = ({ collection }) => {
   let meta = {
     title: `${collection.title} Tailwind CSS Components | HyperUI`,
     description: `Range of ${collection.title} Tailwind CSS components.`,
   }
-
-  let { spacing, height, center } = collection
 
   return (
     <ToastContext.Provider value={toast}>
@@ -71,7 +68,7 @@ const Collection: NextPage<Props> = ({ collection, id }) => {
           <div className="container py-8 sm:py-16">
             <div className="flow-root">
               <ul className="-my-8 divide-y divide-gray-100 lg:-my-16">
-                <Example id={id} collection={collection.title} />
+                <Example collection={collection.title} />
               </ul>
             </div>
           </div>

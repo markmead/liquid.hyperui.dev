@@ -6,11 +6,10 @@ import Copy from './copy'
 import Code from './code'
 
 type Props = {
-  id: string
   collection: string
 }
 
-const Example: FunctionComponent<Props> = ({ id, collection }) => {
+const Example: FunctionComponent<Props> = ({ collection }) => {
   let [html, setHtml] = useState<string>()
   let [code, setCode] = useState<string>()
   let [view, setView] = useState<boolean>(true)
