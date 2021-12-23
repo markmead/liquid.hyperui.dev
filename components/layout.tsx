@@ -27,7 +27,15 @@ const Layout: FunctionComponent = ({ children }) => {
 
       <aside className="p-4 bg-black">
         <p className="text-sm font-medium text-center text-white">
-          🐞 🐛 Status: In Development 🐞 🐛
+          🚨 Status: WIP | Updates on Twitter{' '}
+          <a
+            href="https://twitter.com/itsmarkmead"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="underline"
+          >
+            @itsmarkmead
+          </a>
         </p>
       </aside>
 
