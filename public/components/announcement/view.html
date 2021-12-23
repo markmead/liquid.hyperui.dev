@@ -1,0 +1,83 @@
+<div x-data="announcement">
+  <div
+    class="p-3 text-center"
+    :style="`background-color: ${background};`"
+  >
+    <p
+      class="inline-flex items-center text-sm font-medium"
+      :style="`color: ${color};`"
+    >
+      <template x-if="link">
+        <a :href="link" x-text="text"></a>
+      </template>
+
+      <template x-if="!link">
+        <span x-text="text"></span>
+      </template>
+
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+        class="h-4 w-4 ml-1.5 flex-shrink-0">
+        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+      </svg>
+    </p>
+  </div>
+
+  <details class="absolute p-4 bg-white border rounded-lg right-4 bottom-4">
+    <summary>
+      Edit
+    </summary>
+
+    <div class="mt-4 space-y-4">
+      <div>
+        <label for="link" class="block text-xs">Link</label>
+        <input type="text" id="link" x-model="link" class="w-full mt-1 text-sm rounded">
+      </div>
+
+      <div>
+        <label for="text" class="block text-xs">Text</label>
+        <input type="text" id="text" x-model="text" class="w-full mt-1 text-sm rounded">
+      </div>
+
+      <div>
+        <label for="color" class="inline-flex items-center p-2 border rounded">
+          <span class="text-xs">
+            Color
+          </span>
+
+          <span
+            class="w-6 h-6 ml-1.5 rounded border"
+            :style="`background-color: ${color};`"
+          ></span>
+        </label>
+        <input type="color" id="color" x-model="color" class="sr-only">
+      </div>
+
+      <div>
+        <label for="background" class="inline-flex items-center p-2 border rounded">
+          <span class="text-xs">
+            Background
+          </span>
+
+          <span
+            class="w-6 h-6 ml-1.5 rounded border"
+            :style="`background-color: ${background};`"
+          ></span>
+        </label>
+        <input type="color" id="background" x-model="background" class="sr-only">
+      </div>
+    </div>
+  </details>
+</div>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('announcement', () => ({
+      link: '',
+      text: 'Our latest products',
+      color: '#ffffff',
+      background: '#000000'
+    }))
+  })
+</script>
+
+

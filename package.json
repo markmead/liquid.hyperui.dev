@@ -1,5 +1,5 @@
 {
-  "name": "hyperui",
+  "name": "hyperui-liquid",
   "private": true,
   "scripts": {
     "dev": "next dev",

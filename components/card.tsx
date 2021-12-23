@@ -9,12 +9,14 @@ type Props = {
 }
 
 const Card: FunctionComponent<Props> = ({ collection }) => {
-  let { id, title, count } = collection
+  let { id, title } = collection
 
   return (
     <Link href={`/components/${id}`}>
       <a className="p-8 border-2 border-black">
-        <p className="text-sm">{count} Components</p>
+        <p className="text-xl">
+          <span role="img">📣</span>
+        </p>
         <h2 className="mt-1 text-lg font-medium">{title}</h2>
       </a>
     </Link>

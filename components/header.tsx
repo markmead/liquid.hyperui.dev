@@ -55,10 +55,6 @@ const Header: FunctionComponent = () => {
           <Link href="/">
             <a className="hidden text-xs font-medium lg:block">Components</a>
           </Link>
-
-          <Link href="/ecommerce">
-            <a className="hidden text-xs font-medium lg:block">Ecommerce</a>
-          </Link>
         </nav>
 
         <div className="relative flex items-center justify-end flex-1 space-x-4">
