@@ -93,7 +93,7 @@ const Example: FunctionComponent<Props> = ({ collection }) => {
             className={`h-[600px] border-2 bg-white rounded-lg border-gray-100 lg:transition-all`}
             width={width}
             loading="lazy"
-            title={`${collection} component ${id}`}
+            title={`${collection} component`}
           ></iframe>
         ) : (
           <pre className={`p-4 bg-gray-100 overflow-auto rounded-lg h-[600px]`}>
