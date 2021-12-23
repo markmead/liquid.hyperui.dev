@@ -4,15 +4,12 @@ import { startCase } from 'lodash'
 
 function getCollections(): Array<Collection> {
   return components.map((component) => {
-    let { id, spacing = '', height = '', center = false } = component
+    let { id, description } = component
 
     return {
       id,
-      center,
-      height,
-      spacing,
       title: startCase(id),
-      count: components.length,
+      subtitle: description,
     }
   })
 }

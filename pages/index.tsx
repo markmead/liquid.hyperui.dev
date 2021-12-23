@@ -37,7 +37,7 @@ const Home: NextPage<Props> = ({ collections }) => {
 
       <Banner
         title="HyperUI"
-        subtitle="An Open Source Tailwind CSS Component Library"
+        subtitle="Open Source Shopify Components Styled by Tailwind CSS "
         button={true}
         buttonText="Get Started"
         buttonLink="#componentGrid"
@@ -45,7 +45,7 @@ const Home: NextPage<Props> = ({ collections }) => {
 
       <div className="container py-8" id="componentGrid">
         <Grid
-          className="gap-4 sm:grid-cols-2 md:grid-cols-4"
+          className="gap-4 sm:grid-cols-2 md:grid-cols-3"
           blocks={collections}
         />
       </div>

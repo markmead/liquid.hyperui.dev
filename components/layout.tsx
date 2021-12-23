@@ -10,7 +10,7 @@ const Layout: FunctionComponent = ({ children }) => {
       <Head>
         <script
           async
-          src="https://www.googletagmanager.com/gtag/js?id=G-VE5EHLYPZP"
+          src="https://www.googletagmanager.com/gtag/js?id=G-E59GXQ9HGR"
         ></script>
         <script
           dangerouslySetInnerHTML={{
@@ -19,11 +19,17 @@ const Layout: FunctionComponent = ({ children }) => {
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
 
-              gtag('config', 'G-VE5EHLYPZP');
+              gtag('config', 'G-E59GXQ9HGR');
             `,
           }}
         />
       </Head>
+
+      <aside className="p-4 bg-black">
+        <p className="text-sm font-medium text-center text-white">
+          🐞 🐛 Status: In Development 🐞 🐛
+        </p>
+      </aside>
 
       <Header />
 

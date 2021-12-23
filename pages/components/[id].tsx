@@ -62,7 +62,11 @@ const Collection: NextPage<Props> = ({ collection, id }) => {
         </Head>
 
         <div>
-          <Banner title={collection.title} subtitle="📣" button={false} />
+          <Banner
+            title={collection.title}
+            subtitle={collection.subtitle}
+            button={false}
+          />
 
           <div className="container py-8 sm:py-16">
             <div className="flow-root">
