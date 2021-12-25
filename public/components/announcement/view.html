@@ -1,25 +1,31 @@
+<link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
 <div x-data="announcement">
   <div
     class="p-3 text-center"
-    :style="`background-color: ${background};`"
+    :style="`background-color: ${background}; color: ${color};`"
   >
-    <p
-      class="inline-flex items-center text-sm font-medium"
-      :style="`color: ${color};`"
-    >
-      <template x-if="link">
-        <a :href="link" x-text="text"></a>
-      </template>
+    <div x-show="slider">
+      <div class="swiper">
+        <ul class="swiper-wrapper"></ul>
+      </div>
+    </div>
 
-      <template x-if="!link">
-        <span x-text="text"></span>
-      </template>
+    <div x-show="!slider">
+      <p class="text-sm font-medium">
+        <template x-if="link">
+          <a
+            x-text="text"
+            :href="link"
+          ></a>
+        </template>
 
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-        class="h-4 w-4 ml-1.5 flex-shrink-0">
-        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-      </svg>
-    </p>
+        <template x-if="!link">
+          <span x-text="text"></span>
+        </template>
+      </p>
+    </div>
   </div>
 
   <details class="absolute p-4 bg-white border rounded-lg right-4 bottom-4">
@@ -27,44 +33,122 @@
       Edit Section
     </summary>
 
-    <div class="mt-4 space-y-4">
-      <div>
-        <label for="link" class="block text-xs">Link</label>
-        <input type="text" id="link" x-model="link" class="w-full mt-1 text-sm border-gray-200 rounded">
+    <div class="grid grid-cols-2 gap-4 mt-4">
+      <div class="col-span-2">
+        <label
+          for="link"
+          class="block text-xs"
+        >
+          Link
+        </label>
+
+        <input
+          type="text"
+          id="link"
+          class="w-full mt-1 text-xs border-gray-200 rounded"
+          x-model="link"
+        >
+      </div>
+
+      <div class="col-span-2">
+        <label
+          for="text"
+          class="block text-xs"
+        >
+          Text
+        </label>
+
+        <input
+          type="text"
+          id="text"
+          class="w-full mt-1 text-xs border-gray-200 rounded"
+          x-model="text"
+        >
       </div>
 
       <div>
-        <label for="text" class="block text-xs">Text</label>
-        <input type="text" id="text" x-model="text" class="w-full mt-1 text-sm border-gray-200 rounded">
-      </div>
-
-      <div>
-        <label for="color" class="inline-flex items-center p-2 border rounded">
-          <span class="text-xs">
+        <label
+          for="color"
+          class="flex items-center justify-center p-2 border rounded cursor-pointer"
+        >
+          <span class="text-xs font-medium">
             Color
           </span>
 
           <span
-            class="w-6 h-6 ml-1.5 rounded border"
             :style="`background-color: ${color};`"
+            class="w-5 h-5 ml-1.5 rounded border flex-shrink-0"
           ></span>
         </label>
-        <input type="color" id="color" x-model="color" class="sr-only">
+
+        <input
+          type="color"
+          id="color"
+          class="sr-only"
+          x-model="color"
+        >
       </div>
 
       <div>
-        <label for="background" class="inline-flex items-center p-2 border rounded">
-          <span class="text-xs">
+        <label
+          for="background"
+          class="flex items-center justify-center p-2 border rounded cursor-pointer"
+        >
+          <span class="text-xs font-medium">
             Background
           </span>
 
           <span
-            class="w-6 h-6 ml-1.5 rounded border"
             :style="`background-color: ${background};`"
+            class="w-5 h-5 ml-1.5 rounded border flex-shrink-0"
           ></span>
         </label>
-        <input type="color" id="background" x-model="background" class="sr-only">
+
+        <input
+          type="color"
+          id="background"
+          class="sr-only"
+          x-model="background"
+        >
       </div>
+
+      <template x-if="slider">
+        <ul class="col-span-2 px-4 py-2 space-y-1 border rounded">
+          <template x-for="(item, index) in items">
+            <li class="flex justify-between text-xs">
+              <p class="font-medium ">
+                Slide <span x-text="index + 1"></span>
+              </p>
+
+              <button
+                type="button"
+                class="text-gray-500 underline rounded"
+                @click="remove(index)"
+              >
+                Remove
+              </button>
+            </li>
+          </template>
+        </ul>
+      </template>
+
+      <button
+        type="button"
+        class="w-full p-2 text-xs font-medium border rounded"
+        @click="toggle"
+      >
+        Toggle Slider
+      </button>
+
+      <template x-if="slider">
+        <button
+          type="button"
+          class="w-full p-2 text-xs font-medium border rounded"
+          @click="add"
+        >
+          Add Slide
+        </button>
+      </template>
     </div>
   </details>
 </div>
@@ -73,10 +157,65 @@
   document.addEventListener('alpine:init', () => {
     Alpine.data('announcement', () => ({
       link: '',
-      text: 'Our latest products',
+      text: 'Our Latest Products',
       color: '#ffffff',
-      background: '#000000'
+      background: '#000000',
+      slider: false,
+      items: [],
+
+      toggle() {
+        this.reset()
+        this.slider = !this.slider
+        this.text = this.slider ? 'Example Slide Item' : 'Our Latest Products'
+
+        this.slider && this.add()
+      },
+
+      add() {
+        this.items.push({
+          text: this.text,
+          link: this.link
+        });
+
+        swiper.appendSlide(`
+          <li class="swiper-slide">
+            <p class="text-sm font-medium">
+              ${this.link
+                ? `<a href="${this.link}">${this.text}</a>`
+                : `<span>${this.text}</span>`}
+            </p>
+          </li>
+        `)
+
+        this.autoplay()
+        this.reset()
+      },
+
+      remove(index) {
+        this.items.splice(index, 1)
+
+        swiper.removeSlide(index)
+
+        this.autoplay()
+      },
+
+      reset() {
+        this.text = ''
+        this.link = ''
+      },
+
+      autoplay() {
+        this.items.length > 1
+          ? swiper.autoplay.start()
+          : swiper.autoplay.stop()
+      }
     }))
+
+    const swiper = new Swiper('.swiper', {
+      loop: true,
+      slidesPerView: 1,
+      autoplay: { delay: 3000 },
+    });
   })
 </script>
 
