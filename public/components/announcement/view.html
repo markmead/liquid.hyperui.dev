@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
 
-<div x-data="section">
+<div x-data>
   <div
     class="p-3 text-center"
     :style="`background-color: ${$store.section.background}; color: ${$store.section.color};`"
@@ -49,6 +49,7 @@
           id="link"
           class="w-full mt-1 text-xs border-gray-200 rounded"
           x-model="$store.section.link"
+          @input="$store.section.generate"
         >
       </div>
 
@@ -65,6 +66,7 @@
           id="text"
           class="w-full mt-1 text-xs border-gray-200 rounded"
           x-model="$store.section.text"
+          @input="$store.section.generate"
         >
       </div>
 
@@ -88,6 +90,7 @@
           id="color"
           class="sr-only"
           x-model="$store.section.color"
+          @input="$store.section.generate"
         >
       </div>
 
@@ -111,10 +114,11 @@
           id="background"
           class="sr-only"
           x-model="$store.section.background"
+          @input="$store.section.generate"
         >
       </div>
 
-      <template x-if="$store.section.slider">
+      <template x-if="$store.section.slider && $store.section.items.length > 0">
         <ul class="col-span-2 px-4 py-2 space-y-1 border rounded">
           <template x-for="(item, index) in $store.section.items">
             <li class="flex justify-between text-xs">
@@ -158,26 +162,31 @@
 <script>
   document.addEventListener('alpine:init', () => {
     Alpine.store('section', {
-      link: '',
-      text: 'Our Latest Products',
-      color: '#ffffff',
       background: '#000000',
-      slider: false,
+      color: '#ffffff',
+      data: {},
       items: [],
+      link: '',
+      slider: false,
+      text: 'Our Latest Products',
 
       toggle() {
         self.reset()
         self.slider = !self.slider
         self.text = self.slider ? 'Example Slide Item' : 'Our Latest Products'
 
-        self.slider && self.add()
+        if (self.slider) {
+          self.items = []
+
+          self.add()
+        }
       },
 
       add() {
         self.items.push({
           text: self.text,
           link: self.link
-        });
+        })
 
         swiper.appendSlide(`
           <li class="swiper-slide">
@@ -191,6 +200,7 @@
 
         self.reset()
         self.autoplay()
+        self.generate()
       },
 
       remove(index) {
@@ -198,6 +208,7 @@
 
         swiper.removeSlide(index)
         self.autoplay()
+        self.generate()
       },
 
       reset() {
@@ -209,6 +220,85 @@
         self.items.length > 1
           ? swiper.autoplay.start()
           : swiper.autoplay.stop()
+      },
+
+      generate() {
+        let schemaData = {
+          name: 'Announcement',
+          tag: 'aside',
+          settings: [
+            {
+              label: 'Show Announcement',
+              id: 'show_announcement',
+              type: 'checkbox',
+              default: true
+            },
+            {
+              label: 'Announcement Text',
+              id: 'announcement_text',
+              type: 'text',
+              default: self.text
+            },
+            {
+              label: 'Announcement URL',
+              id: 'announcement_url',
+              type: 'url',
+              default: self.link
+            },
+            {
+              label: 'Announcement Background Color',
+              id: 'announcement_background_color',
+              type: 'color',
+              default: self.background
+            },
+            {
+              label: 'Announcement Text Color',
+              id: 'announcement_text_color',
+              type: 'color',
+              default: self.color
+            }
+          ],
+        }
+
+        if (self.slider) {
+          let blocksData = {
+            name: "Slide",
+            type: "slide",
+            settings: []
+          }
+
+          let blockSettings = self.items.map((item) => {
+            return [
+              {
+                "label": "Slide Text",
+                "id": "slide_text",
+                "type": "text",
+                "default": item.text
+              },
+              {
+                "label": "Slide Link",
+                "id": "slide_link",
+                "type": "url",
+                "default": item.link
+              }
+            ]
+          })
+
+          blocksData.settings = blocksData.settings.concat(blockSettings)
+
+          if (blocksData.settings.length > 0) {
+            schemaData.blocks = [blocksData]
+          }
+        }
+
+        if (!self.slider) {
+          schemaData.blocks = []
+        }
+
+        self.data = schemaData
+
+        localStorage.removeItem('componentAnnouncementSchema')
+        localStorage.setItem('componentAnnouncementSchema', JSON.stringify(self.data, null, 2))
       }
     })
 
@@ -219,7 +309,7 @@
     })
 
     const self = Alpine.store('section')
+
+    self.generate()
   })
 </script>
-
-

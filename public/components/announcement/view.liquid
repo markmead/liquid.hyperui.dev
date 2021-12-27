@@ -1,12 +1,12 @@
 {% if section.settings.show_announcement %}
   <div
     class="p-3 text-center"
-    style="background-color: {{ section.settings.background_color }};"
+    style="
+      color: {{ section.settings.text_color }};
+      background-color: {{ section.settings.background_color }};
+    "
   >
-    <p
-      class="text-sm font-medium"
-      style="color: {{ section.settings.text_color }};"
-    >
+    <p class="text-sm font-medium">
       {% if section.settings.announcement_link != blank %}
         <a href="{{ section.settings.announcement_link }}">
           {{ section.settings.announcement_text }}
@@ -17,48 +17,3 @@
     </p>
   </div>
 {% endif %}
-
-{% schema %}
-{
-	"name": "Announcement Bar",
-	"tag": "aside",
-	"class": "announcement-bar",
-	"settings": [{
-			"type": "text",
-			"id": "Announcement announcement_text",
-			"label": "Text"
-		},
-		{
-			"type": "url",
-			"id": "announcement_link",
-			"label": "Link"
-		},
-    {
-      "type": "color",
-      "id": "announcement_bg_color",
-      "label": "Background Color"
-      "default": "#000"
-    },
-    {
-      "type": "color",
-      "id": "text_color",
-      "label": "Text Color",
-      "default": "#fff"
-    },
-		{
-			"type": "checkbox",
-			"id": "show_announcement",
-			"default": true,
-			"label": "Show Announcement",
-			"info": "✅ = Show Announcement"
-		},
-    {
-			"type": "checkbox",
-			"id": "show_icon",
-			"default": true,
-			"label": "Show Icon",
-			"info": "✅ = Show Icon"
-		}
-	]
-}
-{% endschema %}
