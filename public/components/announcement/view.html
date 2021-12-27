@@ -1,31 +1,33 @@
 <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
 
-<div x-data="announcement">
+<div x-data="section">
   <div
     class="p-3 text-center"
-    :style="`background-color: ${background}; color: ${color};`"
+    :style="`background-color: ${$store.section.background}; color: ${$store.section.color};`"
   >
-    <div x-show="slider">
-      <div class="swiper">
-        <ul class="swiper-wrapper"></ul>
-      </div>
+    <div
+      class="swiper"
+      x-show="$store.section.slider"
+    >
+      <ul class="swiper-wrapper"></ul>
     </div>
 
-    <div x-show="!slider">
-      <p class="text-sm font-medium">
-        <template x-if="link">
-          <a
-            x-text="text"
-            :href="link"
-          ></a>
-        </template>
+    <p
+      x-show="!$store.section.slider"
+      class="text-sm font-medium"
+    >
+      <template x-if="$store.section.link">
+        <a
+          x-text="$store.section.text"
+          :href="$store.section.link"
+        ></a>
+      </template>
 
-        <template x-if="!link">
-          <span x-text="text"></span>
-        </template>
-      </p>
-    </div>
+      <template x-if="!$store.section.link">
+        <span x-text="$store.section.text"></span>
+      </template>
+    </p>
   </div>
 
   <details class="absolute p-4 bg-white border rounded-lg right-4 bottom-4">
@@ -46,7 +48,7 @@
           type="text"
           id="link"
           class="w-full mt-1 text-xs border-gray-200 rounded"
-          x-model="link"
+          x-model="$store.section.link"
         >
       </div>
 
@@ -62,7 +64,7 @@
           type="text"
           id="text"
           class="w-full mt-1 text-xs border-gray-200 rounded"
-          x-model="text"
+          x-model="$store.section.text"
         >
       </div>
 
@@ -76,7 +78,7 @@
           </span>
 
           <span
-            :style="`background-color: ${color};`"
+            :style="`background-color: ${$store.section.color};`"
             class="w-5 h-5 ml-1.5 rounded border flex-shrink-0"
           ></span>
         </label>
@@ -85,7 +87,7 @@
           type="color"
           id="color"
           class="sr-only"
-          x-model="color"
+          x-model="$store.section.color"
         >
       </div>
 
@@ -99,7 +101,7 @@
           </span>
 
           <span
-            :style="`background-color: ${background};`"
+            :style="`background-color: ${$store.section.background};`"
             class="w-5 h-5 ml-1.5 rounded border flex-shrink-0"
           ></span>
         </label>
@@ -108,13 +110,13 @@
           type="color"
           id="background"
           class="sr-only"
-          x-model="background"
+          x-model="$store.section.background"
         >
       </div>
 
-      <template x-if="slider">
+      <template x-if="$store.section.slider">
         <ul class="col-span-2 px-4 py-2 space-y-1 border rounded">
-          <template x-for="(item, index) in items">
+          <template x-for="(item, index) in $store.section.items">
             <li class="flex justify-between text-xs">
               <p class="font-medium ">
                 Slide <span x-text="index + 1"></span>
@@ -123,7 +125,7 @@
               <button
                 type="button"
                 class="text-gray-500 underline rounded"
-                @click="remove(index)"
+                @click="$store.section.remove(index)"
               >
                 Remove
               </button>
@@ -135,16 +137,16 @@
       <button
         type="button"
         class="w-full p-2 text-xs font-medium border rounded"
-        @click="toggle"
+        @click="$store.section.toggle"
       >
         Toggle Slider
       </button>
 
-      <template x-if="slider">
+      <template x-if="$store.section.slider">
         <button
           type="button"
           class="w-full p-2 text-xs font-medium border rounded"
-          @click="add"
+          @click="$store.section.add"
         >
           Add Slide
         </button>
@@ -155,7 +157,7 @@
 
 <script>
   document.addEventListener('alpine:init', () => {
-    Alpine.data('announcement', () => ({
+    Alpine.store('section', {
       link: '',
       text: 'Our Latest Products',
       color: '#ffffff',
@@ -164,58 +166,59 @@
       items: [],
 
       toggle() {
-        this.reset()
-        this.slider = !this.slider
-        this.text = this.slider ? 'Example Slide Item' : 'Our Latest Products'
+        self.reset()
+        self.slider = !self.slider
+        self.text = self.slider ? 'Example Slide Item' : 'Our Latest Products'
 
-        this.slider && this.add()
+        self.slider && self.add()
       },
 
       add() {
-        this.items.push({
-          text: this.text,
-          link: this.link
+        self.items.push({
+          text: self.text,
+          link: self.link
         });
 
         swiper.appendSlide(`
           <li class="swiper-slide">
             <p class="text-sm font-medium">
-              ${this.link
-                ? `<a href="${this.link}">${this.text}</a>`
-                : `<span>${this.text}</span>`}
+              ${self.link
+                ? `<a href="${self.link}">${self.text}</a>`
+                : `<span>${self.text}</span>`}
             </p>
           </li>
         `)
 
-        this.autoplay()
-        this.reset()
+        self.reset()
+        self.autoplay()
       },
 
       remove(index) {
-        this.items.splice(index, 1)
+        self.items.splice(index, 1)
 
         swiper.removeSlide(index)
-
-        this.autoplay()
+        self.autoplay()
       },
 
       reset() {
-        this.text = ''
-        this.link = ''
+        self.text = ''
+        self.link = ''
       },
 
       autoplay() {
-        this.items.length > 1
+        self.items.length > 1
           ? swiper.autoplay.start()
           : swiper.autoplay.stop()
       }
-    }))
+    })
 
     const swiper = new Swiper('.swiper', {
       loop: true,
       slidesPerView: 1,
       autoplay: { delay: 3000 },
-    });
+    })
+
+    const self = Alpine.store('section')
   })
 </script>
 
