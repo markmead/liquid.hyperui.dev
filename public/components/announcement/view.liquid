@@ -1,19 +1,27 @@
 {% if section.settings.show_announcement %}
   <div
     class="p-3 text-center"
-    style="
-      color: {{ section.settings.text_color }};
-      background-color: {{ section.settings.background_color }};
-    "
+    style="color: {{ section.settings.text_color }}; background-color: {{ section.settings.background_color }};"
   >
-    <p class="text-sm font-medium">
-      {% if section.settings.announcement_link != blank %}
-        <a href="{{ section.settings.announcement_link }}">
-          {{ section.settings.announcement_text }}
-        </a>
-      {% else %}
-        {{ section.settings.announcement_text }}
-      {% endif %}
-    </p>
+    <div class="swiper">
+      <ul class="swiper-wrapper">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'announcement' %}
+              <li>
+                <p class="text-sm font-medium">
+                  {% if block.settings.link %}
+                    <a href="{{ block.settings.link }}">
+                      {{ block.settings.text }}
+                    </a>
+                  {% else %}
+                    {{ block.settings.text }}
+                  {% endif %}
+                </p>
+              </li>
+          {% endcase %}
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 {% endif %}
