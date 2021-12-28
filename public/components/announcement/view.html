@@ -4,30 +4,14 @@
 <div x-data>
   <div
     class="p-3 text-center"
-    :style="`background-color: ${$store.section.background}; color: ${$store.section.color};`"
+    :style="`
+      color: ${$store.section.color};
+      background-color: ${$store.section.background};
+    `"
   >
-    <div
-      class="swiper"
-      x-show="$store.section.slider"
-    >
+    <div class="swiper">
       <ul class="swiper-wrapper"></ul>
     </div>
-
-    <p
-      x-show="!$store.section.slider"
-      class="text-sm font-medium"
-    >
-      <template x-if="$store.section.link">
-        <a
-          x-text="$store.section.text"
-          :href="$store.section.link"
-        ></a>
-      </template>
-
-      <template x-if="!$store.section.link">
-        <span x-text="$store.section.text"></span>
-      </template>
-    </p>
   </div>
 
   <details class="absolute p-4 bg-white border rounded-lg right-4 bottom-4">
@@ -48,8 +32,8 @@
           type="text"
           id="link"
           class="w-full mt-1 text-xs border-gray-200 rounded"
-          x-model="$store.section.link"
-          @input="$store.section.generate"
+          x-model="$store.slider.link"
+          @input="$store.schema.generate"
         >
       </div>
 
@@ -65,8 +49,8 @@
           type="text"
           id="text"
           class="w-full mt-1 text-xs border-gray-200 rounded"
-          x-model="$store.section.text"
-          @input="$store.section.generate"
+          x-model="$store.slider.text"
+          @input="$store.schema.generate"
         >
       </div>
 
@@ -90,7 +74,7 @@
           id="color"
           class="sr-only"
           x-model="$store.section.color"
-          @input="$store.section.generate"
+          @input="$store.schema.generate"
         >
       </div>
 
@@ -114,22 +98,22 @@
           id="background"
           class="sr-only"
           x-model="$store.section.background"
-          @input="$store.section.generate"
+          @input="$store.schema.generate"
         >
       </div>
 
-      <template x-if="$store.section.slider && $store.section.items.length > 0">
-        <ul class="col-span-2 px-4 py-2 space-y-1 border rounded">
-          <template x-for="(item, index) in $store.section.items">
-            <li class="flex justify-between text-xs">
-              <p class="font-medium ">
-                Slide <span x-text="index + 1"></span>
+      <template x-if="$store.slider.items.length > 0">
+        <ul class="col-span-2 p-3 border rounded">
+          <template x-for="(item, index) in $store.slider.items">
+            <li class="flex justify-between p-1.5 text-xs rounded hover:bg-gray-50">
+              <p class="font-medium">
+                Announcement <span x-text="index + 1"></span>
               </p>
 
               <button
                 type="button"
                 class="text-gray-500 underline rounded"
-                @click="$store.section.remove(index)"
+                @click="$store.slider.remove(index)"
               >
                 Remove
               </button>
@@ -138,178 +122,146 @@
         </ul>
       </template>
 
-      <button
-        type="button"
-        class="w-full p-2 text-xs font-medium border rounded"
-        @click="$store.section.toggle"
-      >
-        Toggle Slider
-      </button>
+      <template x-if="$store.slider.items.length === 0">
+        <div class="col-span-2 p-3 border rounded">
+          <p class="text-xs text-center text-gray-500">
+            No announcements added yet.
+          </p>
+        </div>
+      </template>
 
-      <template x-if="$store.section.slider">
+      <div class="col-span-2">
         <button
           type="button"
-          class="w-full p-2 text-xs font-medium border rounded"
-          @click="$store.section.add"
+          class="w-full px-5 py-3 text-xs font-medium bg-gray-100 border rounded"
+          @click="$store.slider.add"
         >
-          Add Slide
+          Add Announcement
         </button>
-      </template>
+      </div>
     </div>
   </details>
 </div>
 
 <script>
   document.addEventListener('alpine:init', () => {
-    Alpine.store('section', {
-      background: '#000000',
-      color: '#ffffff',
-      data: {},
-      items: [],
+    Alpine.store('slider', {
       link: '',
-      slider: false,
-      text: 'Our Latest Products',
-
-      toggle() {
-        self.reset()
-        self.slider = !self.slider
-        self.text = self.slider ? 'Example Slide Item' : 'Our Latest Products'
-
-        if (self.slider) {
-          self.items = []
-
-          self.add()
-        }
-      },
+      text: 'Our Latest Product',
+      items: [],
 
       add() {
-        self.items.push({
-          text: self.text,
-          link: self.link
-        })
+        const { link, text } = slider
+        const newItems = [...slider.items, { link, text }]
+
+        slider.items = newItems
 
         swiper.appendSlide(`
           <li class="swiper-slide">
             <p class="text-sm font-medium">
-              ${self.link
-                ? `<a href="${self.link}">${self.text}</a>`
-                : `<span>${self.text}</span>`}
+              ${slider.link
+                ? `<a href="${slider.link}">${slider.text}</a>`
+                : `<span>${slider.text}</span>`
+              }
             </p>
           </li>
         `)
 
-        self.reset()
-        self.autoplay()
-        self.generate()
+        slider.update()
       },
 
       remove(index) {
-        self.items.splice(index, 1)
+        const newItems = slider.items.filter((item, itemIndex) => itemIndex !== index);
+
+        slider.items = newItems;
 
         swiper.removeSlide(index)
-        self.autoplay()
-        self.generate()
+        slider.update()
       },
 
-      reset() {
-        self.text = ''
-        self.link = ''
-      },
+      update() {
+        const allowMove = slider.items.length > 1
 
-      autoplay() {
-        self.items.length > 1
-          ? swiper.autoplay.start()
-          : swiper.autoplay.stop()
-      },
+        allowMove ? swiper.autoplay.start() : swiper.autoplay.stop()
 
-      generate() {
-        let schemaData = {
-          name: 'Announcement',
-          tag: 'aside',
-          settings: [
-            {
-              label: 'Show Announcement',
-              id: 'show_announcement',
-              type: 'checkbox',
-              default: true
-            },
-            {
-              label: 'Announcement Text',
-              id: 'announcement_text',
-              type: 'text',
-              default: self.text
-            },
-            {
-              label: 'Announcement URL',
-              id: 'announcement_url',
-              type: 'url',
-              default: self.link
-            },
-            {
-              label: 'Announcement Background Color',
-              id: 'announcement_background_color',
-              type: 'color',
-              default: self.background
-            },
-            {
-              label: 'Announcement Text Color',
-              id: 'announcement_text_color',
-              type: 'color',
-              default: self.color
-            }
-          ],
-        }
-
-        if (self.slider) {
-          let blocksData = {
-            name: "Slide",
-            type: "slide",
-            settings: []
-          }
-
-          let blockSettings = self.items.map((item) => {
-            return [
-              {
-                "label": "Slide Text",
-                "id": "slide_text",
-                "type": "text",
-                "default": item.text
-              },
-              {
-                "label": "Slide Link",
-                "id": "slide_link",
-                "type": "url",
-                "default": item.link
-              }
-            ]
-          })
-
-          blocksData.settings = blocksData.settings.concat(blockSettings)
-
-          if (blocksData.settings.length > 0) {
-            schemaData.blocks = [blocksData]
-          }
-        }
-
-        if (!self.slider) {
-          schemaData.blocks = []
-        }
-
-        self.data = schemaData
-
-        localStorage.removeItem('componentAnnouncementSchema')
-        localStorage.setItem('componentAnnouncementSchema', JSON.stringify(self.data, null, 2))
+        schema.generate()
       }
     })
+
+    Alpine.store('section', {
+      background: '#000000',
+      color: '#ffffff',
+      slider: false,
+    })
+
+    Alpine.store('schema', {
+      data: {},
+
+      generate() {
+        const firstSlide = slider.items[0]
+
+        const schemaData = {
+          name: "Announcement",
+          tag: "aside",
+          settings: [
+            {
+              id: "show_announcement",
+              label: "Show",
+              type: "checkbox",
+              default: true,
+            },
+            {
+              id: "announcement_background_color",
+              label: "Background Color",
+              type: "color",
+              default: section.background
+            },
+            {
+              id: "announcement_text_color",
+              label: "Text Color",
+              type: "color",
+              default: section.color
+            }
+          ],
+          blocks: [
+            {
+              name: "Announcement",
+              type: "announcement",
+              settings: [
+                {
+                  id: "announcement_text",
+                  label: "Announcement Text",
+                  type: "text",
+                  default: firstSlide?.text
+                },
+                {
+                  id: "announcement_link",
+                  label: "Announcement Link",
+                  type: "url",
+                  default: firstSlide?.link
+                }
+              ]
+            }
+          ]
+        }
+
+        localStorage.removeItem('componentAnnouncementSchema')
+        localStorage.setItem('componentAnnouncementSchema', JSON.stringify(schemaData, null, 2))
+      }
+    })
+
+    const schema = Alpine.store('schema')
+    const section = Alpine.store('section')
+    const slider = Alpine.store('slider')
 
     const swiper = new Swiper('.swiper', {
       loop: true,
       slidesPerView: 1,
+      allowTouchMove: false,
       autoplay: { delay: 3000 },
     })
 
-    const self = Alpine.store('section')
-
-    self.generate()
+    slider.add()
+    schema.generate()
   })
 </script>
