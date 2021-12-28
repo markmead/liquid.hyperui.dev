@@ -142,9 +142,14 @@
 
 <script>
   document.addEventListener('alpine:init', () => {
-    Alpine.store('slider', {
+    const DEFAULT_SLIDE = {
       link: '',
       text: 'Our Latest Product',
+    }
+
+    Alpine.store('slider', {
+      link: DEFAULT_SLIDE.link,
+      text: DEFAULT_SLIDE.text,
       items: [],
 
       add() {
@@ -163,6 +168,9 @@
             </p>
           </li>
         `)
+
+        slider.link = DEFAULT_SLIDE.link
+        slider.text = DEFAULT_SLIDE.text
 
         slider.update()
       },
