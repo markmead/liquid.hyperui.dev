@@ -351,7 +351,7 @@
         swiper.appendSlide(`
           <li class="swiper-slide">
             <div
-              class="relative flex items-center h-full bg-bottom bg-no-repeat bg-cover swiper-slide-background"
+              class="relative flex items-center h-screen bg-bottom bg-no-repeat bg-cover swiper-slide-background"
               style="background-image: url('${image}')"
             >
               <div
@@ -423,7 +423,7 @@
         color: '#000000',
         opacity: '0.1',
       },
-      center: false,
+      center: true,
 
       color() {
         document.querySelectorAll('.swiper-slide-overlay').forEach((el) => {

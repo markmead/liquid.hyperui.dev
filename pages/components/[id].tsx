@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
-import { Collection } from '../../interface/collection'
+import { Component } from '../../interface/component'
 
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -11,10 +11,10 @@ import ToastContext from '../../context/toast'
 import Banner from '../../components/banner'
 import Example from '../../components/example'
 
-import { collectionIds, currentCollection } from '../../lib/collections'
+import { componentIds, currentComponent } from '../../lib/components'
 
 export async function getStaticPaths() {
-  let paths = collectionIds()
+  let paths = componentIds()
 
   return {
     paths,
@@ -23,11 +23,11 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { id } }: Params) {
-  let collection = currentCollection(id)
+  let component = currentComponent(id)
 
   return {
     props: {
-      collection,
+      component,
     },
   }
 }
@@ -39,13 +39,13 @@ type Params = {
 }
 
 type Props = {
-  collection: Collection
+  component: Component
 }
 
-const Collection: NextPage<Props> = ({ collection }) => {
+const component: NextPage<Props> = ({ component }) => {
   let meta = {
-    title: `${collection.title} Tailwind CSS Components | HyperUI`,
-    description: `Range of ${collection.title} Tailwind CSS components.`,
+    title: `${component.title} Tailwind CSS Components | HyperUI`,
+    description: `Range of ${component.title} Tailwind CSS components.`,
   }
 
   return (
@@ -60,15 +60,15 @@ const Collection: NextPage<Props> = ({ collection }) => {
 
         <div>
           <Banner
-            title={collection.title}
-            subtitle={collection.subtitle}
+            title={component.title}
+            subtitle={component.description}
             button={false}
           />
 
           <div className="container py-8 sm:py-16">
             <div className="flow-root">
               <ul className="-my-8 divide-y divide-gray-100 lg:-my-16">
-                <Example collection={collection.title} />
+                <Example title={component.title} />
               </ul>
             </div>
           </div>
@@ -88,4 +88,4 @@ const Collection: NextPage<Props> = ({ collection }) => {
   )
 }
 
-export default Collection
+export default component
