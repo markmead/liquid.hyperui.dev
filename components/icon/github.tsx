@@ -1,13 +1,9 @@
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  style: string
-}
-
-const IconGithub: FunctionComponent<Props> = ({ style }) => {
+const IconGithub: FunctionComponent = () => {
   return (
     <svg
-      className={style}
+      className="w-5 h-5"
       fill="currentColor"
       viewBox="0 0 24 24"
       aria-hidden="true"
