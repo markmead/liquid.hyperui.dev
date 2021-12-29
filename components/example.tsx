@@ -14,11 +14,16 @@ const Example: FunctionComponent<Props> = ({ collection }) => {
   let [code, setCode] = useState<string>()
   let [view, setView] = useState<boolean>(true)
   let [width, setWidth] = useState<string>('100%')
+  let [schema, setSchema] = useState<string | null>()
 
   let isExample = view
 
   useEffect(() => {
     let { origin, href } = window.location
+    let schema = localStorage.getItem('componentAnnouncementSchema')
+
+    setSchema(schema)
+
     fetch(`${href}/view.liquid`)
       .then((res) => {
         if (res.ok) {
@@ -98,6 +103,7 @@ const Example: FunctionComponent<Props> = ({ collection }) => {
         ) : (
           <pre className={`p-4 bg-gray-100 overflow-auto rounded-lg h-[600px]`}>
             {code}
+            {`\n{% schema %}\n${schema}\n{% endschema %}`}
           </pre>
         )}
       </div>
