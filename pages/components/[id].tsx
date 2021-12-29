@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import ToastContext from '../../context/toast'
 
+import Breadcrumbs from '../../components/breadcrumbs'
 import Banner from '../../components/banner'
 import Example from '../../components/example'
 
@@ -59,6 +60,8 @@ const component: NextPage<Props> = ({ component }) => {
         </Head>
 
         <div>
+          <Breadcrumbs component={component} />
+
           <Banner
             title={component.title}
             subtitle={component.description}
