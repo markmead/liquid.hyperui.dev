@@ -1,6 +1,8 @@
 import type { FunctionComponent } from 'react'
 import Head from 'next/head'
 
+import Announcements from './announcements'
+import Announcement from './announcement'
 import Header from './header'
 import Footer from './footer'
 
@@ -25,19 +27,17 @@ const Layout: FunctionComponent = ({ children }) => {
         />
       </Head>
 
-      <aside className="p-4 bg-black">
-        <p className="text-sm font-medium text-center text-white">
-          🚨 Status: WIP | Updates on Twitter{' '}
-          <a
-            href="https://twitter.com/itsmarkmead"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="underline"
-          >
-            @itsmarkmead
-          </a>
-        </p>
-      </aside>
+      <Announcements>
+        <Announcement
+          text="🌟 HyperUI Liquid is Open Source! Drop a Star on GitHub 🌟"
+          url="https://github.com/markmead/hyperui-liquid"
+        />
+
+        <Announcement
+          text="🚀 Find More Components on HyperUI! Purely HTML 🚀"
+          url="https://hyperui.dev"
+        />
+      </Announcements>
 
       <Header />
 
