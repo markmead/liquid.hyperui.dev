@@ -1,6 +1,6 @@
 import type { FunctionComponent } from 'react'
 
-const IconGithub: FunctionComponent<Props> = () => {
+const IconGithub: FunctionComponent = () => {
   return (
     <svg
       className="w-5 h-5"
