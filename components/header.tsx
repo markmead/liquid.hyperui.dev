@@ -1,42 +1,8 @@
-import { FunctionComponent, useEffect } from 'react'
-
-import { useState, useRef } from 'react'
-import { useRouter } from 'next/router'
+import { FunctionComponent } from 'react'
 
 import Link from 'next/link'
 
-import IconGithub from './icon/github'
-
-import { collections } from '../lib/collections'
-
 const Header: FunctionComponent = () => {
-  let router = useRouter()
-  let [open, setOpen] = useState(false)
-  let menuRef = useRef<HTMLElement>(null)
-  let buttonRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    setOpen(false)
-  }, [router.asPath])
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node) &&
-        event.target !== buttonRef.current
-      ) {
-        setOpen(false)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  })
-
   return (
     <header className="sticky inset-x-0 top-0 z-50 bg-white border-b border-gray-100">
       <div className="container flex items-center justify-between h-16">
@@ -56,59 +22,6 @@ const Header: FunctionComponent = () => {
             <a className="hidden text-xs font-medium lg:block">Components</a>
           </Link>
         </nav>
-
-        <div className="relative flex items-center justify-end flex-1 space-x-4">
-          <button
-            ref={buttonRef}
-            type="button"
-            className="p-2 bg-gray-100 rounded"
-            onClick={() => setOpen(!open)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 8h16M4 16h16"
-              />
-            </svg>
-          </button>
-
-          <a
-            href="https://github.com/markmead/hyperui"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2 bg-gray-100 rounded"
-          >
-            <IconGithub style="w-4 h-4" />
-          </a>
-
-          {open && (
-            <nav
-              ref={menuRef}
-              role="navigation"
-              className="absolute right-0 grid grid-cols-2 p-4 mt-1 rounded gap-x-4 gap-y-2 bg-gray-50 top-full"
-            >
-              {collections.map((collection, index) => {
-                let { id, title } = collection
-
-                return (
-                  <Link key={index} href={`/components/${id}`}>
-                    <a className="block text-xs font-medium hover:opacity-50">
-                      {title}
-                    </a>
-                  </Link>
-                )
-              })}
-            </nav>
-          )}
-        </div>
       </div>
     </header>
   )

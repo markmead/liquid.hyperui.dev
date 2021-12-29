@@ -6,10 +6,10 @@ import Copy from './copy'
 import Code from './code'
 
 type Props = {
-  collection: string
+  title: string
 }
 
-const Example: FunctionComponent<Props> = ({ collection }) => {
+const Example: FunctionComponent<Props> = ({ title }) => {
   let [html, setHtml] = useState<string>()
   let [code, setCode] = useState<string>()
   let [view, setView] = useState<boolean>(true)
@@ -98,7 +98,7 @@ const Example: FunctionComponent<Props> = ({ collection }) => {
             className={`h-[600px] border-2 bg-white rounded-lg border-gray-100 lg:transition-all`}
             width={width}
             loading="lazy"
-            title={`${collection} component`}
+            title={`${title} component`}
           ></iframe>
         ) : (
           <pre className={`p-4 bg-gray-100 overflow-auto rounded-lg h-[600px]`}>

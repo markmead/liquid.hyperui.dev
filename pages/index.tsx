@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
-import { Collection } from '../interface/collection'
-import { collections } from '../lib/collections'
+import { Component } from '../interface/component'
+import { components } from '../lib/components'
 
 import Banner from '../components/banner'
 import Grid from '../components/grid'
@@ -10,16 +10,16 @@ import Grid from '../components/grid'
 export async function getStaticProps() {
   return {
     props: {
-      collections,
+      components,
     },
   }
 }
 
 type Props = {
-  collections: Array<Collection>
+  components: Array<Component>
 }
 
-const Home: NextPage<Props> = ({ collections }) => {
+const Home: NextPage<Props> = ({ components }) => {
   let meta = {
     title: 'Open Source Tailwind CSS Components | HyperUI',
     description:
@@ -46,7 +46,7 @@ const Home: NextPage<Props> = ({ collections }) => {
       <div className="container py-8" id="componentGrid">
         <Grid
           className="gap-4 sm:grid-cols-2 md:grid-cols-3"
-          blocks={collections}
+          blocks={components}
         />
       </div>
     </>
