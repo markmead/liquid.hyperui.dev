@@ -1,0 +1,55 @@
+<div class="swiper">
+  <ul class="swiper-wrapper">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'banner' %}
+          <li class="swiper-slide">
+            <div
+              class="
+                relative bg-center bg-no-repeat bg-cover flex items-center
+                {% if section.settings.center %}h-screen{% else %}h-full{% endif %}
+              "
+              style="background-image: url({{ block.settings.image | asset_url: 'large' }});"
+            >
+              <div
+                class="absolute inset-0 w-full h-full"
+                style="
+                  background-color: {{ section.settings.overlay_color }};
+                  opacity: {{ section.settings.overlay_opacity }};
+                "
+              ></div>
+
+              <div
+                class="
+                  flex max-w-5xl w-full px-4 mx-auto relative py-24 sm:py-32 lg:py-40
+                  {{ block.settings.position_content }}
+                "
+                style="color: {{ block.settings.color }}"
+              >
+                <div class="max-w-xl {{ block.settings.position_text }}">
+                  <h2 class="text-3xl font-bold">
+                    {{ block.settings.title }}
+                  </h2>
+
+                  {% if block.settings.text %}
+                    <p class="mt-4 text-lg">
+                      {{ block.settings.text }}
+                    </p>
+                  {% endif %}
+
+                  {% if block.settings.button_link %}
+                    <a
+                      href="{{ block.settings.button_link }}"
+                      class="inline-block px-5 py-3 mt-8 text-sm text-white bg-black rounded-lg"
+                    >
+                      {{ block.settings.button_link }}
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </li>
+      {% endcase %}
+    {% endfor %}
+  </ul>
+</div>

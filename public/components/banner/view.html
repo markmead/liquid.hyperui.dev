@@ -1,0 +1,594 @@
+<link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+<style>
+  .swiper-slide {
+    height: auto;
+  }
+</style>
+
+<div x-data>
+  <div class="swiper">
+    <ul class="swiper-wrapper"></ul>
+  </div>
+
+  <details class="absolute z-50 p-4 bg-white border rounded-lg right-4 bottom-4 max-h-[500px] overflow-auto">
+    <summary class="text-xs font-medium">
+      Edit Section
+    </summary>
+
+    <div class="grid items-end grid-cols-2 gap-4 mt-4">
+      <div class="col-span-2">
+        <label
+          for="title"
+          class="block text-xs"
+        >
+          Title
+        </label>
+
+        <input
+          type="text"
+          id="title"
+          class="w-full mt-1 text-xs border-gray-200 rounded"
+          x-model="$store.slider.title"
+          @input="$store.schema.generate"
+        >
+        </input>
+      </div>
+
+      <div class="col-span-2">
+        <label
+          for="text"
+          class="block text-xs"
+        >
+          Text
+        </label>
+
+        <textarea
+          id="text"
+          class="w-full mt-1 text-xs border-gray-200 rounded"
+          x-model="$store.slider.text"
+          @input="$store.schema.generate"
+        >
+        </textarea>
+      </div>
+
+      <div class="col-span-2">
+        <label
+          for="image"
+          class="block text-xs"
+        >
+          Image
+        </label>
+
+        <input
+          type="text"
+          id="image"
+          class="w-full mt-1 text-xs border-gray-200 rounded"
+          x-model="$store.slider.image"
+          @input="$store.schema.generate"
+        >
+        </input>
+
+        <small class="mt-1 text-xs italic text-gray-500">
+          This is an image picker in the schema
+        </small>
+      </div>
+
+      <div>
+        <label
+          for="button_link"
+          class="block text-xs"
+        >
+          Button Link
+        </label>
+
+        <input
+          type="text"
+          id="button_link"
+          class="w-full mt-1 text-xs border-gray-200 rounded"
+          x-model="$store.slider.button.link"
+          @input="$store.schema.generate"
+        >
+      </div>
+
+      <div>
+        <label
+          for="button_link"
+          class="block text-xs"
+        >
+          Button Text
+        </label>
+
+        <input
+          type="text"
+          id="button_text"
+          class="w-full mt-1 text-xs border-gray-200 rounded"
+          x-model="$store.slider.button.text"
+          @input="$store.schema.generate"
+        >
+      </div>
+
+      <div class="col-span-2">
+        <label
+          for="button_show"
+          class="flex items-center"
+        >
+          <input
+            type="checkbox"
+            id="button_show"
+            class="w-5 h-5 border-gray-200 rounded"
+            x-model="$store.slider.button.show"
+            @input="$store.schema.generate;"
+          >
+
+          <span class="ml-3 text-xs font-medium">
+            Show Button
+          </span>
+        </label>
+      </div>
+
+      <div>
+        <label
+          for="position_text"
+          class="block text-xs"
+        >
+          Text Position
+        </label>
+
+        <select
+          id="position_text"
+          class="w-full mt-1 text-xs border-gray-200 rounded"
+          x-model="$store.slider.position.text"
+          @input="$store.schema.generate"
+        >
+          <option value="text-center">Center</option>
+          <option value="text-left">Left</option>
+          <option value="text-right">Right</option>
+        </select>
+      </div>
+
+      <div>
+        <label
+          for="position_content"
+          class="block text-xs"
+        >
+          Content Position
+        </label>
+
+        <select
+          id="position_content"
+          class="w-full mt-1 text-xs border-gray-200 rounded"
+          x-model="$store.slider.position.content"
+          @input="$store.schema.generate"
+        >
+          <option value="justify-center">Center</option>
+          <option value="justify-start">Left</option>
+          <option value="justify-end">Right</option>
+        </select>
+      </div>
+
+      <div>
+        <label
+          for="text_color"
+          class="flex items-center justify-center p-2 border rounded cursor-pointer"
+        >
+          <span class="text-xs font-medium">
+            Text Color
+          </span>
+
+          <span
+            :style="`background-color: ${$store.slider.color};`"
+            class="w-5 h-5 ml-1.5 rounded border flex-shrink-0"
+          ></span>
+        </label>
+
+        <input
+          type="color"
+          id="text_color"
+          class="sr-only"
+          x-model="$store.slider.color"
+          @input="$store.schema.generate;"
+        >
+      </div>
+
+      <div>
+        <label
+          for="overlay_color"
+          class="flex items-center justify-center p-2 border rounded cursor-pointer"
+        >
+          <span class="text-xs font-medium">
+            Overlay Color
+          </span>
+
+          <span
+            :style="`background-color: ${$store.section.overlay.color};`"
+            class="w-5 h-5 ml-1.5 rounded border flex-shrink-0"
+          ></span>
+        </label>
+
+        <input
+          type="color"
+          id="overlay_color"
+          class="sr-only"
+          x-model="$store.section.overlay.color"
+          @input="$store.section.color; $store.schema.generate;"
+        >
+      </div>
+
+      <div class="col-span-2">
+        <label
+          for="overlay_opacity"
+          class="text-xs font-medium"
+        >
+          Overlay Opacity
+        </label>
+
+        <select
+          id="overlay_opacity"
+          class="w-full mt-1 text-xs border-gray-200 rounded"
+          x-model="$store.section.overlay.opacity"
+          @change="$store.section.color; $store.schema.generate;"
+        >
+          <option value="0.1">0.1</option>
+          <option value="0.2">0.2</option>
+          <option value="0.3">0.3</option>
+          <option value="0.4">0.4</option>
+          <option value="0.5">0.5</option>
+          <option value="0.6">0.6</option>
+          <option value="0.7">0.7</option>
+          <option value="0.8">0.8</option>
+          <option value="0.9">0.9</option>
+          <option value="1">1</option>
+        </select>
+
+        <small class="mt-1 text-xs italic text-gray-500">
+          This is a range slider in the schema
+        </small>
+      </div>
+
+      <div class="col-span-2">
+        <label
+          for="center"
+          class="flex items-center"
+        >
+          <input
+            type="checkbox"
+            id="center"
+            class="w-5 h-5 border-gray-200 rounded"
+            x-model="$store.section.center"
+            @input="$store.section.layout; $store.schema.generate;"
+          >
+
+          <span class="ml-3 text-xs font-medium">
+            Vertical Center
+          </span>
+        </label>
+      </div>
+
+      <template x-if="$store.slider.items.length > 0">
+        <ul class="col-span-2 p-3 border rounded">
+          <template x-for="(item, index) in $store.slider.items">
+            <li class="flex justify-between p-1.5 text-xs rounded hover:bg-gray-50">
+              <p class="font-medium">
+                Slide <span x-text="index + 1"></span>
+              </p>
+
+              <button
+                type="button"
+                class="text-gray-500 underline rounded"
+                @click="$store.slider.remove(index)"
+              >
+                Remove
+              </button>
+            </li>
+          </template>
+        </ul>
+      </template>
+
+      <template x-if="$store.slider.items.length === 0">
+        <div class="col-span-2 p-3 border rounded">
+          <p class="text-xs text-center text-gray-500">
+            No banners added yet.
+          </p>
+        </div>
+      </template>
+
+      <div class="col-span-2">
+        <button
+          type="button"
+          class="w-full px-5 py-3 text-xs font-medium bg-gray-100 border rounded"
+          @click="$store.slider.add"
+        >
+          Add Banner
+        </button>
+      </div>
+    </div>
+  </details>
+</div>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    const DEFAULT_SLIDE = {
+      title: 'Our Latest Products',
+      text: 'Get the latest products from our store to your door',
+      image: 'https://images.unsplash.com/photo-1487700160041-babef9c3cb55',
+      color: '#000000',
+      button: {
+        text: 'Shop Now',
+        link: '/shop',
+        show: true
+      },
+      position: {
+        text: 'text-center',
+        content: 'justify-end',
+      }
+    }
+
+    Alpine.store('slider', {
+      text: DEFAULT_SLIDE.text,
+      title: DEFAULT_SLIDE.title,
+      image: DEFAULT_SLIDE.image,
+      color: DEFAULT_SLIDE.color,
+      button: {
+        text: DEFAULT_SLIDE.button.text,
+        link: DEFAULT_SLIDE.button.link,
+        show: DEFAULT_SLIDE.button.show
+      },
+      position: {
+        text: DEFAULT_SLIDE.position.text,
+        content: DEFAULT_SLIDE.position.content,
+      },
+      items: [],
+
+      add() {
+        const { overlay } = section
+        const { title, text, image, color, button, position } = slider
+        const newItems = [...slider.items, { title, text, image, color, button, position }]
+
+        slider.items = newItems
+
+        swiper.appendSlide(`
+          <li class="swiper-slide">
+            <div
+              class="relative flex items-center h-full bg-bottom bg-no-repeat bg-cover swiper-slide-background"
+              style="background-image: url('${image}')"
+            >
+              <div
+                class="absolute inset-0 w-full h-full swiper-slide-overlay"
+                style="background-color: ${overlay.color}; opacity: ${overlay.opacity}"
+              ></div>
+
+              <div
+                class="
+                  flex max-w-5xl w-full px-4 mx-auto relative py-24 sm:py-32 lg:py-40
+                  ${position.content}
+                "
+                style="color: ${color};"
+              >
+                <div class="max-w-xl ${position.text}">
+                  <h2 class="text-3xl font-bold">
+                    ${title}
+                  </h2>
+
+                  ${text && `<p class="mt-4 text-lg">${text}</p>`}
+
+                  ${button.show ? (
+                    `<a
+                      href="${button.link}"
+                      class="inline-block px-5 py-3 mt-8 text-sm text-white bg-black rounded-lg"
+                    >
+                      ${button.text}
+                    </a>`
+                  ) : ''}
+                </div>
+              </div>
+            </div>
+          </li>
+        `)
+
+        slider.text = DEFAULT_SLIDE.text
+        slider.title = DEFAULT_SLIDE.title
+        slider.image = DEFAULT_SLIDE.image
+        slider.color = DEFAULT_SLIDE.color
+        slider.button.link = DEFAULT_SLIDE.button.link
+        slider.button.text = DEFAULT_SLIDE.button.text
+        slider.button.show = DEFAULT_SLIDE.button.show
+        slider.position.content = DEFAULT_SLIDE.position.content
+        slider.position.text = DEFAULT_SLIDE.position.text
+
+        slider.update()
+      },
+
+      remove(index) {
+        const newItems = slider.items.filter((item, itemIndex) => itemIndex !== index);
+
+        slider.items = newItems;
+
+        swiper.removeSlide(index)
+        slider.update()
+      },
+
+      update() {
+        const allowMove = slider.items.length > 1
+
+        allowMove ? swiper.autoplay.start() : swiper.autoplay.stop()
+
+        schema.generate()
+      }
+    })
+
+    Alpine.store('section', {
+      overlay: {
+        color: '#000000',
+        opacity: '0.1',
+      },
+      center: false,
+
+      color() {
+        document.querySelectorAll('.swiper-slide-overlay').forEach((el) => {
+          el.style.backgroundColor = section.overlay.color
+          el.style.opacity = section.overlay.opacity
+        })
+      },
+
+      layout() {
+        document.querySelectorAll('.swiper-slide-background').forEach((el) => {
+          el.classList.toggle('h-screen')
+          el.classList.toggle('h-full')
+        })
+      }
+    })
+
+    Alpine.store('schema', {
+      data: {},
+
+      generate() {
+        const firstSlide = slider.items[0]
+
+        const schemaData = {
+          name: "Banner",
+          tag: "section",
+          settings: [
+            {
+              id: "center",
+              label: "Center",
+              type: "checkbox",
+              default: true,
+              info: "Force the banner to fill the full vertical height of the screen",
+            },
+            {
+              type: "header",
+              content: "Overlay"
+            },
+            {
+              id: "overlay_color",
+              label: "Color",
+              type: "color",
+              default: section.overlay.color
+            },
+            {
+              id: "overlay_opacity",
+              label: "Opacity",
+              type: "range",
+              min: "0",
+              max: "1",
+              step: "0.1",
+              default: section.overlay.opacity
+            }
+          ],
+          blocks: [
+            {
+              name: "Banner",
+              type: "banner",
+              settings: [
+                {
+                  id: "title",
+                  label: "Title",
+                  type: "text",
+                  default: firstSlide?.title
+                },
+                {
+                  id: "text",
+                  label: "Text",
+                  type: "textarea",
+                  default: firstSlide?.text,
+                  info: "Leave blank to hide"
+                },
+                {
+                  id: "image",
+                  label: "Background Image",
+                  type: "image_picker",
+                },
+                {
+                  id: "color",
+                  label: "Text Color",
+                  type: "color",
+                  default: firstSlide?.color
+                },
+                {
+                  type: "header",
+                  content: "Button"
+                },
+                {
+                  id: "button_text",
+                  label: "Text",
+                  type: "text",
+                  default: firstSlide?.button.text
+                },
+                {
+                  id: "button_link",
+                  label: "Link",
+                  type: "url",
+                  default: firstSlide?.button.link,
+                  info: "Leave blank to hide the button"
+                },
+                {
+                  type: "header",
+                  content: "Alignment"
+                },
+                {
+                  id: "position_text",
+                  label: "Text",
+                  type: "select",
+                  default: firstSlide?.position.text,
+                  options: [
+                    {
+                      value: "text-center",
+                      label: "Center"
+                    },
+                    {
+                      value: "text-left",
+                      label: "Left"
+                    },
+                    {
+                      value: "text-right",
+                      label: "Right"
+                    }
+                  ],
+                },
+                {
+                  id: "position_content",
+                  label: "Content",
+                  type: "select",
+                  default: firstSlide?.position.content,
+                  options: [
+                    {
+                      value: "justify-center",
+                      label: "Center"
+                    },
+                    {
+                      value: "justify-start",
+                      label: "Left"
+                    },
+                    {
+                      value: "justify-end",
+                      label: "Right"
+                    }
+                  ],
+                }
+              ]
+            }
+          ]
+        }
+
+        localStorage.removeItem('componentAnnouncementSchema')
+        localStorage.setItem('componentAnnouncementSchema', JSON.stringify(schemaData, null, 2))
+      }
+    })
+
+    const schema = Alpine.store('schema')
+    const section = Alpine.store('section')
+    const slider = Alpine.store('slider')
+
+    const swiper = new Swiper('.swiper', {
+      loop: true,
+      slidesPerView: 1,
+      allowTouchMove: false,
+      autoplay: { delay: 3000 },
+    })
+
+    slider.add()
+    schema.generate()
+  })
+</script>
